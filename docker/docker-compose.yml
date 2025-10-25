@@ -16,8 +16,8 @@ services:
       - app-network
 
   app:
-    image: my-vthread-app:latest
-    container_name: my-vthread-app
+    image: sample-payments-service:latest
+    container_name: sample-payments-service
     depends_on:
       - postgres
     environment:

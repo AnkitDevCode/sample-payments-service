@@ -1,4 +1,4 @@
-# Virtual Threads Example - Payment Service
+# sample-payments-service
 
 A small Spring Boot service demonstrating a Payment API with a separation between JPA entity and API model, a mapper,
 service layer, and controllers. Uses PostgreSQL as the runtime database.

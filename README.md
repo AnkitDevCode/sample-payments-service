@@ -8,7 +8,7 @@ service layer, and controllers. Uses PostgreSQL as the runtime database.
 - Project structure
 - Prerequisites
 - Build and run
-- API
+- APIs
     - `POST /api/payments`
     - `GET /api/payments/{id}`
 
@@ -83,7 +83,7 @@ docker compose down
 
 5. The application will start on `http://localhost:8080`.
 
-## API
+## APIs
 
 ### `POST /api/payments`
 

@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: sample-payments-service
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    password: sa
+    url: jdbc:postgresql://localhost:5432/mydb?TimeZone=UTC
+    username: postgres
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        jdbc:
+          time_zone: UTC
+    show-sql: true

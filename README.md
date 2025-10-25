@@ -142,5 +142,5 @@ Retrieves a payment by its ID.
     "message": "Payment not found with id: 44",
     "path": "/api/payments/44"
 }
-  ```
+```
 

@@ -1,6 +1,6 @@
-package com.demo.ms.repository;
+package com.payments.repository;
 
-import com.demo.ms.entity.PaymentEntity;
+import com.payments.entity.PaymentEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

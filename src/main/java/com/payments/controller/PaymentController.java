@@ -1,9 +1,9 @@
-package com.demo.ms.controller;
+package com.payments.controller;
 
 
-import com.demo.ms.exception.PaymentNotFoundException;
-import com.demo.ms.model.Payment;
-import com.demo.ms.service.PaymentService;
+import com.payments.exception.PaymentNotFoundException;
+import com.payments.model.Payment;
+import com.payments.service.PaymentService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,8 +28,8 @@ public class PaymentController {
     }
 
     @PostMapping
-    public ResponseEntity<Payment> createPayment(@RequestBody Payment payment) {
-        Payment res = paymentService.createPayment(payment);
+    public ResponseEntity<Payment> makePayment(@RequestBody Payment payment) {
+        Payment res = paymentService.makePayment(payment);
         URI location = URI.create("/api/payments/" + res.getId());
         return ResponseEntity.created(location).body(res);
     }

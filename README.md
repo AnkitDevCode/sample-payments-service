@@ -91,10 +91,10 @@ Creates a new payment.
 
 - **Request Body**:
   ```json
-      {
-      "amount": 125.50,
-      "currency": "USD",
-      "status": "PENDING"
+    {
+    "amount": 125.50,
+    "currency": "USD",
+    "paymentMethod": "NET_BANKING"
     }
   ```
 - **Response**:
@@ -103,9 +103,12 @@ Creates a new payment.
   ```json
     {
     "id": 1,
-    "amount": 125.5,
+    "amount": 125.50,
     "currency": "USD",
-    "status": "PENDING"
+    "status": "PENDING",
+    "paymentMethod": "NET_BANKING",
+    "createdAt": "2025-10-25T09:09:54.6955289",
+    "updatedAt": "2025-10-25T09:09:54.6955289"
     }
   ```
 
@@ -115,17 +118,20 @@ Retrieves a payment by its ID.
 
 - **Path Parameter**:
     - `id`: The ID of the payment to retrieve.
-- **Response**:
-- **Status**: `200 OK`
-    - **Body**:
-      ```json
-        {
-        "id": 1,
-        "amount": 125.5,
-        "currency": "USD",
-        "status": "PENDING"
-        }
-      ```
+  - **Response**:
+    - **Status**: `200 OK`
+        - **Body**:
+    ```json
+     {
+      id": 1,
+      "amount": 125.50,
+      "currency": "USD",
+      "status": "PENDING",
+      "paymentMethod": "NET_BANKING",
+      "createdAt": "2025-10-25T09:09:54.695529",
+      "updatedAt": "2025-10-25T09:09:54.695529"
+      }
+   ```
 - **Status**: `404 Not Found` (if payment does not exist)
 - **Body**:
   ```json

@@ -1,4 +1,4 @@
-package com.demo.ms.exception;
+package com.payments.exception;
 
 public class PaymentNotFoundException extends RuntimeException {
     public PaymentNotFoundException(Long id) {

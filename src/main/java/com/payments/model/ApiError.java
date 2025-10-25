@@ -1,4 +1,4 @@
-package com.demo.ms.model;
+package com.payments.model;
 
 
 import lombok.AllArgsConstructor;

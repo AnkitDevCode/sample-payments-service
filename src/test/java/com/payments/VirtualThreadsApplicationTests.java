@@ -1,6 +1,5 @@
-package com.demo.ms;
+package com.payments;
 
-import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest

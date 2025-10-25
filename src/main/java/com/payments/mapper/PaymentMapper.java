@@ -1,7 +1,11 @@
-package com.demo.ms.mapper;
+package com.payments.mapper;
 
-import com.demo.ms.entity.PaymentEntity;
-import com.demo.ms.model.Payment;
+import com.payments.entity.PaymentEntity;
+import com.payments.model.Payment;
+import com.payments.model.PaymentStatus;
+
+import java.time.LocalDateTime;
+import java.util.UUID;
 
 public final class PaymentMapper {
 
@@ -12,9 +16,14 @@ public final class PaymentMapper {
         if (model == null) return null;
         PaymentEntity e = new PaymentEntity();
         e.setId(model.getId());
+        e.setTransactionId(UUID.randomUUID().toString());
         e.setAmount(model.getAmount());
         e.setCurrency(model.getCurrency());
         e.setStatus(model.getStatus());
+        e.setPaymentMethod(model.getPaymentMethod());
+        e.setStatus(PaymentStatus.PENDING);
+        e.setCreatedAt(LocalDateTime.now());
+        e.setUpdatedAt(LocalDateTime.now());
         return e;
     }
 
@@ -25,6 +34,9 @@ public final class PaymentMapper {
         m.setAmount(entity.getAmount());
         m.setCurrency(entity.getCurrency());
         m.setStatus(entity.getStatus());
+        m.setPaymentMethod(entity.getPaymentMethod());
+        m.setCreatedAt(entity.getCreatedAt());
+        m.setUpdatedAt(entity.getUpdatedAt());
         return m;
     }
 }

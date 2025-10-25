@@ -1,9 +1,9 @@
-package com.demo.ms.service;
+package com.payments.service;
 
-import com.demo.ms.entity.PaymentEntity;
-import com.demo.ms.mapper.PaymentMapper;
-import com.demo.ms.model.Payment;
-import com.demo.ms.repository.PaymentRepository;
+import com.payments.entity.PaymentEntity;
+import com.payments.mapper.PaymentMapper;
+import com.payments.model.Payment;
+import com.payments.repository.PaymentRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,7 +20,7 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
-    public Payment createPayment(Payment payment) {
+    public Payment makePayment(Payment payment) {
         PaymentEntity entity = PaymentMapper.toEntity(payment);
         entity.setId(null); // ensure DB-generated id
         PaymentEntity saved = repository.save(entity);

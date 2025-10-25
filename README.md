@@ -42,11 +42,11 @@ service layer, and controllers. Uses PostgreSQL as the runtime database.
 
 1. Clone the repository:
    ```bash
-    git clone https://github.com/AnkitDevCode/virtual-threads.git                        
+    git clone git@github.com:AnkitDevCode/sample-payments-service.git                       
    ```
 2. Navigate to the project directory:
    ```bash
-    cd virtual-threads
+    cd sample-payments-service
     ```
 3. Build the project using Maven:
     ```bash
@@ -62,7 +62,7 @@ Alternatively, you can use Docker Compose to run the PostgreSQL database and the
 2. Navigate to the project directory.
 3. Build the Docker image: 
    ```bash
-   docker build -t my-vthread-app:latest .
+   docker build -t sample-payments-service:latest .
    ``` 
 4. Start the services using Docker Compose: please see the docker/docker-compose.yml file for configuration.
 

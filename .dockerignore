@@ -1,0 +1,26 @@
+### Maven / Gradle build output
+target/
+build/
+
+### IDE files
+.idea/
+.vscode/
+*.iml
+.project
+.classpath
+.settings/
+
+### OS files
+.DS_Store
+Thumbs.db
+
+### Logs and temporary files
+logs/
+*.log
+tmp/
+temp/
+
+### Configuration files (if not needed in the image, or handled by environment variables)
+application*.properties
+application*.yml
+.env

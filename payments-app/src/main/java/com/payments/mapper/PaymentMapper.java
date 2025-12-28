@@ -2,6 +2,7 @@ package com.payments.mapper;
 
 import com.payments.entity.PaymentEntity;
 import com.payments.model.Payment;
+import com.payments.model.PaymentRequest;
 import com.payments.model.PaymentStatus;
 
 import java.time.LocalDateTime;
@@ -12,15 +13,13 @@ public final class PaymentMapper {
     private PaymentMapper() {
     }
 
-    public static PaymentEntity toEntity(Payment model) {
-        if (model == null) return null;
+    public static PaymentEntity toEntity(PaymentRequest paymentRequest) {
+        if (paymentRequest == null) return null;
         PaymentEntity e = new PaymentEntity();
-        e.setId(model.getId());
         e.setTransactionId(UUID.randomUUID().toString());
-        e.setAmount(model.getAmount());
-        e.setCurrency(model.getCurrency());
-        e.setStatus(model.getStatus());
-        e.setPaymentMethod(model.getPaymentMethod());
+        e.setAmount(paymentRequest.getAmount());
+        e.setCurrency(paymentRequest.getCurrency());
+        e.setPaymentMethod(paymentRequest.getPaymentMethod());
         e.setStatus(PaymentStatus.PENDING);
         e.setCreatedAt(LocalDateTime.now());
         e.setUpdatedAt(LocalDateTime.now());

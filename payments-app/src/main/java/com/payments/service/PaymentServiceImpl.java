@@ -3,6 +3,7 @@ package com.payments.service;
 import com.payments.entity.PaymentEntity;
 import com.payments.mapper.PaymentMapper;
 import com.payments.model.Payment;
+import com.payments.model.PaymentRequest;
 import com.payments.repository.PaymentRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,8 +21,8 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
-    public Payment makePayment(Payment payment) {
-        PaymentEntity entity = PaymentMapper.toEntity(payment);
+    public Payment makePayment(PaymentRequest paymentRequest) {
+        PaymentEntity entity = PaymentMapper.toEntity(paymentRequest);
         entity.setId(null); // ensure DB-generated id
         PaymentEntity saved = repository.save(entity);
         return PaymentMapper.toModel(saved);

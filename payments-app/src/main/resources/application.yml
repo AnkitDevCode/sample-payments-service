@@ -38,3 +38,7 @@ springdoc:
     defaultModelExpandDepth: 1
     tryItOutEnabled: true
   show-actuator: false
+
+third-party:
+  jsonplaceholder:
+    base-url: https://jsonplaceholder.typicode.com

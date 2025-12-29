@@ -1,4 +1,4 @@
-# sample-payments-service
+# Sample-payments-service
 
 A modern **Spring Boot payments microservice** demonstrating **contract-first API development** with a clean separation between API contracts and application logic.
 

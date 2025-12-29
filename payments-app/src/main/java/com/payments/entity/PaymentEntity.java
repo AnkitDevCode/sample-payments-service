@@ -27,6 +27,9 @@ public class PaymentEntity {
     @Column(nullable = false, unique = true)
     private String transactionId;
 
+    @Column(nullable = false)
+    private String userName;
+
     @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal amount;
 

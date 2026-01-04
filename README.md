@@ -103,7 +103,7 @@ sample-payments-service/
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/your-org/sample-payments-service.git
+git clone https://github.com/AnkitDevCode/sample-payments-service.git
 cd sample-payments-service
 ```
 

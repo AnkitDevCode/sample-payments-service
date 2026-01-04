@@ -1,0 +1,2 @@
+com.payment.starter.security.config.PaymentSecurityAutoConfiguration
+com.payment.starter.security.config.SecurityAutoConfiguration

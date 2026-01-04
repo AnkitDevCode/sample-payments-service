@@ -5,9 +5,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.demo.ms</groupId>
-        <artifactId>demo-ms</artifactId>
-        <version>${revision}</version>
+        <groupId>com.payment.ms</groupId>
+        <artifactId>payment-ms</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
     </parent>
 
     <artifactId>payments-app</artifactId>
@@ -16,8 +16,14 @@
     <dependencies>
         <!-- API contract -->
         <dependency>
-            <groupId>com.demo.ms</groupId>
+            <groupId>com.payment.ms</groupId>
             <artifactId>payments-api</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <!-- payment security starter -->
+        <dependency>
+            <groupId>com.payment.ms</groupId>
+            <artifactId>payment-security-starter</artifactId>
             <version>${project.version}</version>
         </dependency>
 

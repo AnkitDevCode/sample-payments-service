@@ -41,7 +41,7 @@
     <Loggers>
 
         <!-- Application packages -->
-        <Logger name="com.payments" level="info" additivity="false">
+        <Logger name="com.payments" level="debug" additivity="false">
             <AppenderRef ref="ConsoleAppender"/>
             <AppenderRef ref="FileAppender"/>
         </Logger>
@@ -59,7 +59,7 @@
         <!-- Spring framework noise reduction -->
         <Logger name="org.springframework" level="warn"/>
         <Logger name="org.springframework.web" level="warn"/>
-
+        <Logger name="org.springframework.security" level="warn"/>
         <!-- Hibernate / JPA -->
         <Logger name="org.hibernate.SQL" level="debug"/>
         <Logger name="org.hibernate.type.descriptor.sql" level="trace"/>

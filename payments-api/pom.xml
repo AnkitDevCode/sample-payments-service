@@ -27,12 +27,6 @@
             <scope>provided</scope>
         </dependency>
 
-        <!-- Nullable support for OpenAPI -->
-        <dependency>
-            <groupId>org.openapitools</groupId>
-            <artifactId>jackson-databind-nullable</artifactId>
-        </dependency>
-
         <!--  Bean Validation API -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -72,39 +66,38 @@
                         <configuration>
                             <!-- Path to your OpenAPI spec file -->
                             <inputSpec>${project.basedir}/src/main/resources/spec/payment-api.yaml</inputSpec>
-
                             <!-- Generator type: spring for Spring Boot server -->
                             <generatorName>spring</generatorName>
-
                             <!-- Output directory for generated code -->
                             <output>${project.build.directory}/generated-sources/openapi</output>
-
                             <!-- API package -->
                             <apiPackage>com.payments.api</apiPackage>
-
                             <!-- Model package -->
                             <modelPackage>com.payments.model</modelPackage>
-
                             <!-- Skip generating the following -->
                             <skipValidateSpec>false</skipValidateSpec>
                             <generateApiTests>false</generateApiTests>
                             <generateModelTests>false</generateModelTests>
                             <generateApiDocumentation>true</generateApiDocumentation>
                             <generateModelDocumentation>true</generateModelDocumentation>
-
                             <!-- Configuration options -->
                             <configOptions>
                                 <delegatePattern>false</delegatePattern>
                                 <interfaceOnly>true</interfaceOnly>
                                 <useTags>true</useTags>
                                 <dateLibrary>java8</dateLibrary>
+                                <useSpringBuiltInValidation>true</useSpringBuiltInValidation>
                                 <java8>true</java8>
                                 <useSpringBoot3>true</useSpringBoot3>
+                                <useJakartaEe>true</useJakartaEe>
+                                <openApiNullable>false</openApiNullable>
+                                <useResponseEntity>true</useResponseEntity>
+                                <useBeanValidation>true</useBeanValidation>
+                                <performBeanValidation>true</performBeanValidation>
                                 <skipDefaultInterface>true</skipDefaultInterface>
                                 <useBeanValidation>true</useBeanValidation>
-                                <performBeanValidation>false</performBeanValidation>
-                                <useJakartaEe>true</useJakartaEe>
-                                <performBeanValidation>false</performBeanValidation>
+                                <performBeanValidation>true</performBeanValidation>
+                                <nullableReferenceTypes>false</nullableReferenceTypes>
                                 <hideGenerationTimestamp>true</hideGenerationTimestamp>
                             </configOptions>
                             <typeMappings>
@@ -114,6 +107,7 @@
                                 <typeMapping>OffsetDateTime=LocalDate</typeMapping>
                             </typeMappings>
                             <importMappings>
+                                <importMapping>Nullable=jakarta.annotation.Nullable</importMapping>
                                 <importMapping>LocalDate=java.time.LocalDate</importMapping>
                                 <importMapping>LocalDateTime=java.time.LocalDateTime</importMapping>
                             </importMappings>

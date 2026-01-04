@@ -10,7 +10,6 @@ A modern **Spring Boot payments microservice** demonstrating **contract-first AP
 - **Lombok Integration** – Reduced boilerplate with auto-generated builders and accessors
 - **Java 8 Time API** – Modern date/time handling with `LocalDate` and `LocalDateTime`
 - **Exception Handling** – Centralized error handling with custom exceptions
-- **MapStruct Mapping** – Type-safe entity-to-DTO conversions
 
 ---
 
@@ -140,7 +139,7 @@ java -jar payments-app/target/payments-app-1.0.0.jar
 
 ### 4. Access H2 Console
 
-Navigate to: `http://localhost:8080/h2-console`
+Navigate to: `http://localhost:8080/api/v1/h2-console`
 
 **Connection Settings:**
 - **JDBC URL:** `jdbc:h2:mem:mydb`
@@ -149,197 +148,133 @@ Navigate to: `http://localhost:8080/h2-console`
 
 ---
 
-## Database Configuration
-
-### Local Development (H2)
-
-```yaml
-# application.yml
-spring:
-  datasource:
-    driver-class-name: org.h2.Driver
-    url: jdbc:h2:mem:mydb
-    username: sa
-    password: sa
-  h2:
-    console:
-      enabled: true
-      path: /h2-console
-  jpa:
-    hibernate:
-      ddl-auto: update
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.H2Dialect
-    show-sql: true
-```
-
-### Production (PostgreSQL)
-
-Create `application-prod.yml`:
-
-```yaml
-# application-prod.yml
-spring:
-  datasource:
-    driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/payments_db?TimeZone=UTC
-    username: postgres
-    password: your_password
-  jpa:
-    hibernate:
-      ddl-auto: validate
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
-        jdbc:
-          time_zone: UTC
-    show-sql: false
-```
-
-**Run with production profile:**
-
-```bash
-mvn spring-boot:run -Dspring-boot.run.profiles=prod
-```
-
----
 
 ## APIs
 
-### Base URL
+# Payments API
+
+This service provides REST APIs to **create and retrieve payments** with explicit
+**debtor** and **creditor** information.
+
+Base URL:
 ```
-http://localhost:8080/payment
+http://localhost:8080/
 ```
-
-### Endpoints
-
-#### 1. Create Payment
-
-**POST** `/api/v1/payments`
-
-**Request Body:**
-```json
-{
-  "amount": 100.50,
-  "currency": "USD",
-  "paymentMethod": "CREDIT_CARD",
-  "description": "Purchase of product XYZ",
-  "customerEmail": "customer@example.com",
-  "paymentDate": "2025-12-25"
-}
-```
-
-**Response (201 Created):**
-```json
-{
-  "id": "550e8400-e29b-41d4-a716-446655440000",
-  "amount": 100.50,
-  "currency": "USD",
-  "status": "PENDING",
-  "paymentMethod": "CREDIT_CARD",
-  "description": "Purchase of product XYZ",
-  "customerEmail": "customer@example.com",
-  "paymentDate": "2025-12-25",
-  "createdAt": "2025-12-25T10:30:00"
-}
-```
-
-#### 2. Get Payment by ID
-
-**GET** `/api/v1/payments/{id}`
-
-**Response (200 OK):**
-```json
-{
-  "id": "550e8400-e29b-41d4-a716-446655440000",
-  "amount": 100.50,
-  "currency": "USD",
-  "status": "COMPLETED",
-  "paymentMethod": "CREDIT_CARD",
-  "description": "Purchase of product XYZ",
-  "customerEmail": "customer@example.com",
-  "paymentDate": "2025-12-25",
-  "createdAt": "2025-12-25T10:30:00",
-  "updatedAt": "2025-12-25T10:35:00"
-}
-```
-
-#### 3. Get All Payments
-
-**GET** `/api/v1/payments`
-
-**Query Parameters:**
-- `page` (optional, default: 0)
-- `size` (optional, default: 20)
-- `status` (optional, filter by status)
-
-**Response (200 OK):**
-```json
-{
-  "content": [
-    {
-      "id": "550e8400-e29b-41d4-a716-446655440000",
-      "amount": 100.50,
-      "currency": "USD",
-      "status": "COMPLETED",
-      "customerEmail": "customer@example.com"
-    }
-  ],
-  "page": 0,
-  "size": 20,
-  "totalElements": 1,
-  "totalPages": 1
-}
-```
-
-#### 4. Update Payment Status
-
-**PATCH** `/api/v1/payments/{id}/status`
-
-**Request Body:**
-```json
-{
-  "status": "COMPLETED"
-}
-```
-
-**Response (200 OK):**
-```json
-{
-  "id": "550e8400-e29b-41d4-a716-446655440000",
-  "status": "COMPLETED",
-  "updatedAt": "2025-12-25T10:35:00"
-}
-```
-
-#### 5. Delete Payment
-
-**DELETE** `/api/v1/payments/{id}`
-
-**Response (204 No Content)**
 
 ---
 
-## Testing
+## Create a Payment
 
-### Run All Tests
-
-```bash
-mvn test
+### Endpoint
+```
+POST /api/v1/payments
 ```
 
-### Run Tests for Specific Module
-
-```bash
-# Test only the app module
-mvn test -pl payments-app
-
-# Test with coverage
-mvn clean test jacoco:report
+### Sample Request
+```json
+{
+  "amount": 999.99,
+  "currency": "USD",
+  "paymentMethod": "CREDIT_CARD",
+  "debtor": {
+    "name": "John Doe",
+    "accountNumber": "1234567890",
+    "bankCode": "HDFC0001234",
+    "address": "123 Main Street, New York, NY 10001",
+    "email": "john.doe@example.com",
+    "phoneNumber": "+1234567890"
+  },
+  "creditor": {
+    "name": "ABC Store",
+    "accountNumber": "9876543210",
+    "bankCode": "ICIC0005678",
+    "address": "456 Commerce Ave, Los Angeles, CA 90001",
+    "email": "payments@abcstore.com",
+    "phoneNumber": "+1987654321"
+  }
+}
 ```
 
+### Sample Response
+```json
+{
+  "paymentId": "6823c05d-dd9d-4bab-a2d4-af9c22bc5fb0",
+  "amount": 999.99,
+  "currency": "USD",
+  "status": "PENDING",
+  "paymentMethod": "CREDIT_CARD",
+  "debtor": {
+    "name": "John Doe",
+    "accountNumber": "1234567890",
+    "address": "123 Main Street, New York, NY 10001",
+    "bankCode": "HDFC0001234",
+    "email": "john.doe@example.com",
+    "phoneNumber": "+1234567890"
+  },
+  "creditor": {
+    "name": "ABC Store",
+    "accountNumber": "9876543210",
+    "address": "456 Commerce Ave, Los Angeles, CA 90001",
+    "bankCode": "ICIC0005678",
+    "email": "payments@abcstore.com",
+    "phoneNumber": "+1987654321"
+  },
+  "createdAt": "2026-01-04T11:22:18.046674",
+  "links": {
+    "self": {
+      "href": "http://localhost:8080/api/v1/payments/6823c05d-dd9d-4bab-a2d4-af9c22bc5fb0",
+      "rel": "self"
+    }
+  },
+  "updatedAt": "2026-01-04T11:22:18.046674"
+}
+```
 
+---
+
+## Get Payment by ID
+
+### Endpoint
+```
+GET /api/v1/payments/{paymentId}
+```
+### Sample Response
+
+```json
+{
+    "paymentId": "6823c05d-dd9d-4bab-a2d4-af9c22bc5fb0",
+    "amount": 999.99,
+    "currency": "USD",
+    "status": "PENDING",
+    "paymentMethod": "CREDIT_CARD",
+    "debtor": {
+        "name": "John Doe",
+        "accountNumber": "1234567890",
+        "address": "123 Main Street, New York, NY 10001",
+        "bankCode": "HDFC0001234",
+        "email": "john.doe@example.com",
+        "phoneNumber": "+1234567890"
+    },
+    "creditor": {
+        "name": "ABC Store",
+        "accountNumber": "9876543210",
+        "address": "456 Commerce Ave, Los Angeles, CA 90001",
+        "bankCode": "ICIC0005678",
+        "email": "payments@abcstore.com",
+        "phoneNumber": "+1987654321"
+    },
+    "createdAt": "2026-01-04T11:22:18.046674",
+    "links": {
+        "self": {
+            "href": "http://localhost:8080/api/v1/payments/6823c05d-dd9d-4bab-a2d4-af9c22bc5fb0",
+            "rel": "self"
+        }
+    },
+    "updatedAt": "2026-01-04T11:22:18.046674"
+}
+```
+
+---
 
 ## 🛠️ Development Workflow
 
@@ -350,7 +285,9 @@ Edit `payments-api/src/main/resources/spec/payment-api.yaml`
 ### 2. Regenerate API Code
 
 ```bash
+
 cd payments-api
+
 mvn clean compile
 ```
 ---
@@ -362,7 +299,7 @@ mvn clean compile
 Access interactive API documentation at:
 
 ```
-http://localhost:8080/payment/swagger-ui.html
+http://localhost:8080/api/v1/swagger-ui.html
 ```
 
 ### OpenAPI JSON
@@ -370,7 +307,7 @@ http://localhost:8080/payment/swagger-ui.html
 Raw OpenAPI specification available at:
 
 ```
-http://localhost:8080/payment/v3/api-docs
+http://localhost:8080/api/v1/api-docs
 ```
 
 ---
@@ -378,24 +315,6 @@ http://localhost:8080/payment/v3/api-docs
 
 ## Deployment
 
-### Docker
-
-Create `Dockerfile`:
-
-```dockerfile
-FROM eclipse-temurin:17-jre-alpine
-WORKDIR /app
-COPY payments-app/target/*.jar app.jar
-EXPOSE 8080
-ENTRYPOINT ["java", "-jar", "app.jar"]
-```
-
-Build and run:
-
-```bash
-docker build -t sample-payments-service .
-docker run -p 8080:8080 sample-payments-service
-```
 
 
 
@@ -419,12 +338,8 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ## Authors
 
-- **Ankit Singh Rawat** - *Initial work* - [YourGitHub](https://github.com/yourusername)
+- **Ankit Singh Rawat** - [AnkitDevCode](https://github.com/AnkitDevCode)
 
 ---
 
 ## Acknowledgments
-
-- Spring Boot team for the amazing framework
-- OpenAPI Initiative for API specifications
-- Lombok and MapStruct projects for productivity tools

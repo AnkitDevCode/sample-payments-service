@@ -4,30 +4,78 @@
     <Properties>
         <Property name="LOG_DIR">logs</Property>
         <Property name="LOG_FILE">${LOG_DIR}/app.log</Property>
+        <Property name="ACCESS_FILE">${LOG_DIR}/access.log</Property>
         <Property name="LOG_PATTERN">
             %d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%t] %c{1} : %msg%n%throwable
+        </Property>
+        <Property name="ACCESS_PATTERN">
+            %d{yyyy-MM-dd HH:mm:ss.SSS} | %msg%n
         </Property>
     </Properties>
 
     <Appenders>
-
         <Console name="ConsoleAppender" target="SYSTEM_OUT">
             <PatternLayout pattern="${LOG_PATTERN}"/>
         </Console>
-
         <RollingFile name="FileAppender"
                      fileName="${LOG_FILE}"
                      filePattern="${LOG_DIR}/app-%d{yyyy-MM-dd}.log">
-            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss} - %msg%n"/>
+            <PatternLayout pattern="${LOG_PATTERN}"/>
             <Policies>
                 <TimeBasedTriggeringPolicy/>
             </Policies>
             <DefaultRolloverStrategy max="30"/>
         </RollingFile>
 
+        <RollingFile name="AsyncAccessLog"
+                     fileName="${ACCESS_FILE}"
+                     filePattern="${LOG_DIR}/app-%d{yyyy-MM-dd}.log">
+            <PatternLayout pattern="${ACCESS_PATTERN}"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy/>
+            </Policies>
+            <DefaultRolloverStrategy max="30"/>
+        </RollingFile>
     </Appenders>
 
     <Loggers>
+
+        <!-- Application packages -->
+        <Logger name="com.payments" level="info" additivity="false">
+            <AppenderRef ref="ConsoleAppender"/>
+            <AppenderRef ref="FileAppender"/>
+        </Logger>
+
+        <Logger name="com.payments.interceptor" level="debug" additivity="false">
+            <AppenderRef ref="ConsoleAppender"/>
+            <AppenderRef ref="FileAppender"/>
+        </Logger>
+
+        <Logger name="com.payments.service" level="info" additivity="false">
+            <AppenderRef ref="ConsoleAppender"/>
+            <AppenderRef ref="FileAppender"/>
+        </Logger>
+
+        <!-- Spring framework noise reduction -->
+        <Logger name="org.springframework" level="warn"/>
+        <Logger name="org.springframework.web" level="warn"/>
+
+        <!-- Hibernate / JPA -->
+        <Logger name="org.hibernate.SQL" level="debug"/>
+        <Logger name="org.hibernate.type.descriptor.sql" level="trace"/>
+
+        <!-- WebClient / Reactor -->
+        <Logger name="org.springframework.web.reactive.function.client" level="info"/>
+        <Logger name="reactor.netty.http.client" level="warn"/>
+
+        <Logger name="org.apache.http" level="error"/>
+
+        <!-- This creates the separate ACCESS logger -->
+        <Logger name="ACCESS_LOG" level="info" additivity="false">
+            <AppenderRef ref="AsyncAccessLog"/>
+        </Logger>
+
+        <!-- Root fallback -->
         <Root level="info">
             <AppenderRef ref="ConsoleAppender"/>
             <AppenderRef ref="FileAppender"/>

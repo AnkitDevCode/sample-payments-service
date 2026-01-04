@@ -1,7 +1,6 @@
 server:
   servlet:
-    context-path: /payments
-
+    context-path: /api/v1
 spring:
   application:
     name: sample-payments-service
@@ -39,6 +38,6 @@ springdoc:
     tryItOutEnabled: true
   show-actuator: false
 
-third-party:
-  jsonplaceholder:
-    base-url: https://jsonplaceholder.typicode.com
+logging:
+  external:
+    body-enabled: false

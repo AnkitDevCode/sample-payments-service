@@ -18,7 +18,7 @@ tags:
     description: Payment transaction operations
 
 paths:
-  /payments/{id}:
+  /payments/{paymentId}:
     get:
       tags:
         - Payments
@@ -26,14 +26,13 @@ paths:
       description: Retrieves a payment transaction by its unique identifier
       operationId: getPaymentById
       parameters:
-        - name: id
+        - name: paymentId
           in: path
           required: true
-          description: Unique identifier of the payment
+          description: Unique transaction identifier of the payment
           schema:
-            type: integer
-            format: int64
-            example: 12345
+            type: string
+            example: "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
       responses:
         '200':
           description: Payment found successfully
@@ -111,14 +110,16 @@ components:
     Payment:
       type: object
       required:
+        - paymentId
         - amount
         - currency
         - status
         - paymentMethod
+        - debtor
+        - creditor
       properties:
-        id:
-          type: integer
-          format: int64
+        paymentId:
+          type: string
           description: Unique identifier of the payment
           example: 12345
         amount:
@@ -136,6 +137,10 @@ components:
           $ref: '#/components/schemas/PaymentStatus'
         paymentMethod:
           $ref: '#/components/schemas/PaymentMethod'
+        debtor:
+          $ref: '#/components/schemas/Party'
+        creditor:
+          $ref: '#/components/schemas/Party'
         createdAt:
           type: string
           format: date-time
@@ -146,13 +151,23 @@ components:
           format: date-time
           description: Timestamp when payment was last updated
           example: "2024-12-20T10:35:00Z"
-
+        links:
+          type: object
+          description: HATEOAS links for the payment resource
+          additionalProperties:
+            $ref: '#/components/schemas/Link'
+          example:
+            self:
+              href: "/api/v1/payments/12345"
+              rel: "self"
     PaymentRequest:
       type: object
       required:
         - amount
         - currency
         - paymentMethod
+        - debtor
+        - creditor
       properties:
         amount:
           type: number
@@ -167,7 +182,61 @@ components:
           example: USD
         paymentMethod:
           $ref: '#/components/schemas/PaymentMethod'
+        debtor:
+          $ref: '#/components/schemas/Party'
+        creditor:
+          $ref: '#/components/schemas/Party'
 
+    Party:
+      type: object
+      required:
+        - name
+        - accountNumber
+      properties:
+        name:
+          type: string
+          description: Name of the party (individual or organization)
+          example: "John Doe"
+          minLength: 1
+          maxLength: 255
+        accountNumber:
+          type: string
+          description: Account number or identifier
+          example: "1234567890"
+          minLength: 1
+          maxLength: 50
+        bankCode:
+          type: string
+          description: Bank code or routing number
+          example: "HDFC0001234"
+          maxLength: 50
+        address:
+          type: string
+          description: Address of the party
+          example: "123 Main Street, New York, NY 10001"
+          maxLength: 500
+        email:
+          type: string
+          format: email
+          description: Email address of the party
+          example: "john.doe@example.com"
+        phoneNumber:
+          type: string
+          description: Phone number of the party
+          example: "+1234567890"
+          pattern: '^\+?[1-9]\d{1,14}$'
+    Link:
+      type: object
+      description: HATEOAS link object
+      properties:
+        href:
+          type: string
+          description: The URL of the link
+          example: "/api/v1/payments/12345"
+        rel:
+          type: string
+          description: The relationship of the link to the resource
+          example: "self"
     PaymentStatus:
       type: string
       description: Current status of the payment transaction

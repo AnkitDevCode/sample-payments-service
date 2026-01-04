@@ -9,5 +9,5 @@ public interface PaymentService {
 
     Payment makePayment(PaymentRequest paymentRequest);
 
-    Optional<Payment> getPaymentById(Long id);
+    Optional<Payment> getPaymentById(String paymentId);
 }

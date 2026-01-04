@@ -25,20 +25,20 @@ import java.net.URI;
 @AllArgsConstructor
 public class PaymentController implements PaymentsApi {
     private final PaymentService paymentService;
-    private final PaymentHateosBuilder hateosBuilder;
+    private final PaymentHateosBuilder paymentHateosBuilder;
 
     @Override
     public ResponseEntity<Payment> getPaymentById(@PathVariable String paymentId) {
         Payment payment = paymentService.getPaymentById(paymentId)
                 .orElseThrow(() -> new PaymentNotFoundException(paymentId));
-        return ResponseEntity.ok(hateosBuilder.addLinks(payment));
+        return ResponseEntity.ok(paymentHateosBuilder.addLinks(payment));
     }
 
     @Override
     public ResponseEntity<Payment> makePayment(@Valid @RequestBody PaymentRequest paymentRequest) {
         Payment res = paymentService.makePayment(paymentRequest);
-        Payment paymentWithLinks = hateosBuilder.addLinks(res);
-        URI location = hateosBuilder.buildLocationUri(res.getPaymentId());
+        Payment paymentWithLinks = paymentHateosBuilder.addLinks(res);
+        URI location = paymentHateosBuilder.buildLocationUri(res.getPaymentId());
         return ResponseEntity.created(location).body(paymentWithLinks);
     }
 }

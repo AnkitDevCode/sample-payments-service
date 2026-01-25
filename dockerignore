@@ -1,0 +1,27 @@
+# Build outputs
+target/
+*/target/
+*.class
+
+# IDE files
+.idea/
+.vscode/
+*.iml
+.classpath
+.project
+.settings/
+
+# Version control
+.git/
+.gitignore
+
+# Documentation
+*.md
+docs/
+
+# Test files
+*/src/test/
+
+# Logs
+*.log
+logs/

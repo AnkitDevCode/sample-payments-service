@@ -16,8 +16,8 @@ services:
       - app-network
 
   app:
-    image: sample-payments-service:latest
-    container_name: sample-payments-service
+    image: payments-service:latest
+    container_name: payments-service
     depends_on:
       - postgres
     environment:
@@ -29,8 +29,10 @@ services:
       - "8080:8080"
     networks:
       - app-network
+
 volumes:
   pgdata:
+
 networks:
   app-network:
     driver: bridge

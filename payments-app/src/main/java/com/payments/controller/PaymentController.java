@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
 
-
 @RestController
 @Validated
 @RequestMapping

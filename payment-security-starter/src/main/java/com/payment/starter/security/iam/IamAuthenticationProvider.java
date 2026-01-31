@@ -12,13 +12,13 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public record IamAuthenticationProvider(IamTokenValidator tokenValidator) implements AuthenticationProvider {
+public record IamAuthenticationProvider(IAMTokenService tokenValidator) implements AuthenticationProvider {
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         String token = authentication.getCredentials().toString();
 
-        JWTClaimsSet claims = tokenValidator.extractAndValidateClaims(token);
+        JWTClaimsSet claims = tokenValidator.validateAndExtract(token);
 
         if (claims == null) {
             throw new BadCredentialsException("Invalid token");

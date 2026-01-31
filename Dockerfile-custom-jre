@@ -115,6 +115,7 @@ ENTRYPOINT ["java","-jar","-Dserver.port=8080","/app/app.jar"]
 # WEB/HTTP:
 # - java.net.http       : HTTP client
 # - java.xml            : XML parsing (web.xml, spring configs)
+# - java.compiler       : Annotation processing (javax.lang.model.*, javax.tools.*)
 #
 # SECURITY/CRYPTO:
 # - jdk.crypto.cryptoki : PKCS#11 crypto provider

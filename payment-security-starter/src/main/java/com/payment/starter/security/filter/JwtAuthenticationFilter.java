@@ -1,7 +1,8 @@
 package com.payment.starter.security.filter;
 
 import com.nimbusds.jwt.JWTClaimsSet;
-import com.payment.starter.security.iam.IamTokenValidator;
+import com.payment.starter.security.config.SecurityProperties;
+import com.payment.starter.security.iam.IAMTokenService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -11,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.util.AntPathMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
@@ -24,22 +26,29 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private static final String AUTHORIZATION_HEADER = "Authorization";
     private static final String BEARER_PREFIX = "Bearer ";
-
-    private final IamTokenValidator tokenValidator;
+    private final IAMTokenService tokenValidator;
+    private final SecurityProperties properties;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
-        log.info("JwtAuthenticationFilter {}", request.getRequestURI());
+        log.info("JwtAuthenticationFilter processing {}", request.getRequestURI());
+
+        if (isExcluded(request)) {
+            log.warn("URL {} is excluded from JWT filter, skipping", request.getRequestURI());
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         String authHeader = request.getHeader(AUTHORIZATION_HEADER);
 
         if (authHeader != null && authHeader.startsWith(BEARER_PREFIX)) {
+
             String token = authHeader.substring(BEARER_PREFIX.length());
 
             try {
-                JWTClaimsSet claims = tokenValidator.extractAndValidateClaims(token);
-
+                JWTClaimsSet claims = tokenValidator.validateAndExtract(token);
                 if (claims != null) {
                     String username = claims.getSubject();
                     List<SimpleGrantedAuthority> authorities = extractAuthorities(claims);
@@ -57,7 +66,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 log.error("Authentication failed: {}", e.getMessage());
             }
         }
-
         filterChain.doFilter(request, response);
     }
 
@@ -79,5 +87,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         } catch (Exception e) {
             return Collections.emptyList();
         }
+    }
+
+    public boolean isExcluded(HttpServletRequest request) {
+        String requestURI = request.getRequestURI();
+        AntPathMatcher pathMatcher = new AntPathMatcher();
+
+        for (String pattern : properties.getAudit().getExcludedPaths()) {
+            if (pathMatcher.match(pattern, requestURI)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

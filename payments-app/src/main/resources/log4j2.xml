@@ -51,15 +51,10 @@
             <AppenderRef ref="FileAppender"/>
         </Logger>
 
-        <Logger name="com.payments.service" level="info" additivity="false">
-            <AppenderRef ref="ConsoleAppender"/>
-            <AppenderRef ref="FileAppender"/>
-        </Logger>
-
         <!-- Spring framework noise reduction -->
         <Logger name="org.springframework" level="warn"/>
-        <Logger name="org.springframework.web" level="warn"/>
-        <Logger name="org.springframework.security" level="warn"/>
+        <Logger name="org.springframework.web" level="info"/>
+        <Logger name="org.springframework.security" level="debug"/>
         <!-- Hibernate / JPA -->
         <Logger name="org.hibernate.SQL" level="debug"/>
         <Logger name="org.hibernate.type.descriptor.sql" level="trace"/>

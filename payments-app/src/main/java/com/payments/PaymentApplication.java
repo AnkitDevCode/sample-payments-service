@@ -24,7 +24,6 @@ public class PaymentApplication {
         return args -> {
             ConditionEvaluationReport report = ctx.getBean(ConditionEvaluationReport.class);
             report.getConditionAndOutcomesBySource().forEach((source, outcome) -> {
-                System.out.println(source + " -> " + outcome);
             });
         };
     }

@@ -23,10 +23,10 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     public Payment makePayment(PaymentRequest paymentRequest) {
-        log.debug("Payment request received. {}", paymentRequest);
+        log.debug("Payment request received.");
         PaymentEntity entity = paymentMapper.toEntity(paymentRequest);
         PaymentEntity savedPayment = repository.save(entity);
-        log.debug("payment stored successful. {}", savedPayment);
+        log.debug("payment stored successful");
         return paymentMapper.toModel(savedPayment);
     }
 

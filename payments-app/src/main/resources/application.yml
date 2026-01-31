@@ -6,22 +6,31 @@ payment:
   security:
     iam:
       enabled: true
-      issuer: "https://your-iam-provider.com"
+      issuer: "auth-service"
       audience: "payment-service"
-      #jwks-uri: "https://your-iam-provider.com/.well-known/jwks.json"
-      # OR use mock for testing
-      jwks-uri: "http://localhost:8080/api/v1/.well-known/jwks.json"
-      mock-jwks-enabled: true
+      ssl-enabled: true
+      ssl-private-key-path: classpath:certs/payment-service.key.pem
+      ssl-certificate-path: classpath:certs/payment-service-public.pem
+      key-id: payment-service-key
       token-expiration-ms: 3600000
       jwks-cache-duration-ms: 3600000
       validate-issuer: true
       validate-audience: true
-      jwks-connect-timeout-ms: 5000
-      jwks-read-timeout-ms: 5000
+    audit:
+      enabled: true
+      excluded-paths:
+        - "/auth/login/**"
+        - "/h2-console/**"
+        - "/error"
+        - "/swagger-ui/**"
+        - "/swagger-ui.html"
+        - "/api-docs/**"
+        - "/actuator/**"
+        - "/health"
 
 spring:
   application:
-    name: sample-payments-service
+    name: payments-service
   datasource:
     driver-class-name: org.h2.Driver
     password: sa

@@ -59,7 +59,7 @@
                 <executions>
                     <!-- Generate Spring Server Stubs -->
                     <execution>
-                        <id>generate-server</id>
+                        <id>generate-payment</id>
                         <goals>
                             <goal>generate</goal>
                         </goals>
@@ -74,6 +74,62 @@
                             <apiPackage>com.payments.api</apiPackage>
                             <!-- Model package -->
                             <modelPackage>com.payments.model</modelPackage>
+                            <!-- Skip generating the following -->
+                            <skipValidateSpec>false</skipValidateSpec>
+                            <generateApiTests>false</generateApiTests>
+                            <generateModelTests>false</generateModelTests>
+                            <generateApiDocumentation>true</generateApiDocumentation>
+                            <generateModelDocumentation>true</generateModelDocumentation>
+                            <!-- Configuration options -->
+                            <configOptions>
+                                <delegatePattern>false</delegatePattern>
+                                <interfaceOnly>true</interfaceOnly>
+                                <useTags>true</useTags>
+                                <dateLibrary>java8</dateLibrary>
+                                <useSpringBuiltInValidation>true</useSpringBuiltInValidation>
+                                <java8>true</java8>
+                                <useSpringBoot3>true</useSpringBoot3>
+                                <useJakartaEe>true</useJakartaEe>
+                                <openApiNullable>false</openApiNullable>
+                                <useResponseEntity>true</useResponseEntity>
+                                <useBeanValidation>true</useBeanValidation>
+                                <performBeanValidation>true</performBeanValidation>
+                                <skipDefaultInterface>true</skipDefaultInterface>
+                                <useBeanValidation>true</useBeanValidation>
+                                <performBeanValidation>true</performBeanValidation>
+                                <nullableReferenceTypes>false</nullableReferenceTypes>
+                                <hideGenerationTimestamp>true</hideGenerationTimestamp>
+                            </configOptions>
+                            <typeMappings>
+                                <typeMapping>date=LocalDate</typeMapping>
+                                <typeMapping>DateTime=LocalDateTime</typeMapping>
+                                <typeMapping>date-time=LocalDateTime</typeMapping>
+                                <typeMapping>OffsetDateTime=LocalDate</typeMapping>
+                            </typeMappings>
+                            <importMappings>
+                                <importMapping>Nullable=jakarta.annotation.Nullable</importMapping>
+                                <importMapping>LocalDate=java.time.LocalDate</importMapping>
+                                <importMapping>LocalDateTime=java.time.LocalDateTime</importMapping>
+                            </importMappings>
+                        </configuration>
+                    </execution>
+
+                    <execution>
+                        <id>generate-auth</id>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <!-- Path to your OpenAPI spec file -->
+                            <inputSpec>${project.basedir}/src/main/resources/spec/auth-api.yaml</inputSpec>
+                            <!-- Generator type: spring for Spring Boot server -->
+                            <generatorName>spring</generatorName>
+                            <!-- Output directory for generated code -->
+                            <output>${project.build.directory}/generated-sources/openapi</output>
+                            <!-- API package -->
+                            <apiPackage>com.auth.api</apiPackage>
+                            <!-- Model package -->
+                            <modelPackage>com.auth.model</modelPackage>
                             <!-- Skip generating the following -->
                             <skipValidateSpec>false</skipValidateSpec>
                             <generateApiTests>false</generateApiTests>

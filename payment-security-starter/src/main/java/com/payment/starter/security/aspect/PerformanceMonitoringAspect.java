@@ -7,16 +7,18 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 @Slf4j
+@Component
 @Aspect
 public class PerformanceMonitoringAspect {
 
     @Autowired(required = false)
     private MeterRegistry meterRegistry;
 
-    @Around("@within(org.springframework.stereotype.Service) || " +
-            "@within(org.springframework.web.bind.annotation.RestController)")
+    @Around("within(@org.springframework.stereotype.Service *) || " +
+            "within(@org.springframework.web.bind.annotation.RestController *)")
     public Object monitorPerformance(ProceedingJoinPoint joinPoint) throws Throwable {
         String methodName = joinPoint.getSignature().toShortString();
         long startTime = System.currentTimeMillis();

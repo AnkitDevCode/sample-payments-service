@@ -1,59 +1,17 @@
 # Sample-payments-service
 
-A modern **Spring Boot payments microservice** demonstrating **contract-first API development** with a clean separation between API contracts and application logic.
+A modern **Spring Boot payments microservice** demonstrating **contract-first API development** with a clean separation
+between API contracts and application logic.
 
 ## Key Features
 
 - **Contract-First Development** – API models & interfaces generated from OpenAPI specification
-- **Multi-Module Architecture** – Clear separation between API contracts (`payments-api`) and business logic (`payments-app`)
+- **Multi-Module Architecture** – Clear separation between API contracts (`payments-api`) and business logic (
+  `payments-app`)
 - **Dual Database Support** – H2 for local development, PostgreSQL for production
 - **Lombok Integration** – Reduced boilerplate with auto-generated builders and accessors
 - **Java 8 Time API** – Modern date/time handling with `LocalDate` and `LocalDateTime`
 - **Exception Handling** – Centralized error handling with custom exceptions
-
----
-
-## Project Structure
-
-```
-sample-payments-service/
-├── payments-api/                          # API contract module
-│   ├── src/main/resources/spec/
-│   │   └── payment-api.yaml              # OpenAPI 3.0 specification
-│   ├── target/generated-sources/openapi/
-│   │   ├── com/payments/api/             # Generated API interfaces
-│   │   └── com/payments/model/           # Generated DTOs with Lombok
-│   └── pom.xml
-│
-├── payments-app/                          # Application logic module
-│   ├── src/main/java/com/payments/
-│   │   ├── controller/                   # REST controllers implementing generated APIs
-│   │   │   └── PaymentController.java
-│   │   ├── entity/                       # JPA entities
-│   │   │   └── Payment.java
-│   │   ├── repository/                   # Spring Data repositories
-│   │   │   └── PaymentRepository.java
-│   │   ├── service/                      # Business logic
-│   │   │   ├── PaymentService.java
-│   │   │   └── PaymentServiceImpl.java
-│   │   ├── mapper/                       # MapStruct mappers
-│   │   │   └── PaymentMapper.java
-│   │   ├── exception/                    # Custom exceptions
-│   │   │   ├── PaymentNotFoundException.java
-│   │   │   └── InvalidPaymentException.java
-│   │   ├── advice/                       # Global exception handlers
-│   │   │   └── GlobalExceptionHandler.java
-│   │   ├── config/                       # Configuration classes
-│   │   │   └── OpenApiConfig.java
-│   │   └── PaymentsApplication.java      # Main application class
-│   ├── src/main/resources/
-│   │   ├── application.yml               # Application configuration
-│   │   └── application-prod.yml          # Production configuration
-│   └── pom.xml
-│
-├── pom.xml                                # Parent POM
-└── README.md
-```
 
 ---
 
@@ -62,12 +20,14 @@ sample-payments-service/
 ### Multi-Module Design
 
 #### **payments-api** (Contract Module)
+
 - Contains the OpenAPI specification (`payment-api.yaml`)
 - Generates API interfaces and DTOs at build time using `openapi-generator-maven-plugin`
 - Acts as a contract between frontend and backend teams
 - Can be published as a JAR for client generation
 
 #### **payments-app** (Implementation Module)
+
 - Implements the generated API interfaces
 - Contains all business logic, persistence, and configuration
 - Depends on `payments-api` module
@@ -75,17 +35,17 @@ sample-payments-service/
 
 ### Technology Stack
 
-| Layer | Technology |
-|-------|-----------|
-| **API Generation** | OpenAPI Generator 7.2.0 |
-| **Framework** | Spring Boot 3.x |
-| **Persistence** | Spring Data JPA, Hibernate |
-| **Database** | H2 (dev), PostgreSQL (prod) |
-| **Mapping** | MapStruct |
-| **Boilerplate Reduction** | Lombok |
-| **Date/Time** | Java 8 Time API |
-| **Build Tool** | Maven 3.8+ |
-| **Java Version** | Java 17+ |
+| Layer                     | Technology                  |
+|---------------------------|-----------------------------|
+| **API Generation**        | OpenAPI Generator 7.2.0     |
+| **Framework**             | Spring Boot 3.x             |
+| **Persistence**           | Spring Data JPA, Hibernate  |
+| **Database**              | H2 (dev), PostgreSQL (prod) |
+| **Mapping**               | MapStruct                   |
+| **Boilerplate Reduction** | Lombok                      |
+| **Date/Time**             | Java 8 Time API             |
+| **Build Tool**            | Maven 3.8+                  |
+| **Java Version**          | Java 17+                    |
 
 ---
 
@@ -118,6 +78,7 @@ mvn clean install -DskipTests
 ```
 
 This will:
+
 1. Generate API interfaces and models from `payment-api.yaml`
 2. Compile both `payments-api` and `payments-app` modules
 3. Run tests (if not skipped)
@@ -142,12 +103,12 @@ java -jar payments-app/target/payments-app-1.0.0.jar
 Navigate to: `http://localhost:8080/api/v1/h2-console`
 
 **Connection Settings:**
+
 - **JDBC URL:** `jdbc:h2:mem:mydb`
 - **Username:** `sa`
 - **Password:** `sa`
 
 ---
-
 
 ## APIs
 
@@ -157,6 +118,7 @@ This service provides REST APIs to **create and retrieve payments** with explici
 **debtor** and **creditor** information.
 
 Base URL:
+
 ```
 http://localhost:8080/
 ```
@@ -166,11 +128,13 @@ http://localhost:8080/
 ## Create a Payment
 
 ### Endpoint
+
 ```
 POST /api/v1/payments
 ```
 
 ### Sample Request
+
 ```json
 {
   "amount": 999.99,
@@ -196,6 +160,7 @@ POST /api/v1/payments
 ```
 
 ### Sample Response
+
 ```json
 {
   "paymentId": "6823c05d-dd9d-4bab-a2d4-af9c22bc5fb0",
@@ -235,42 +200,44 @@ POST /api/v1/payments
 ## Get Payment by ID
 
 ### Endpoint
+
 ```
 GET /api/v1/payments/{paymentId}
 ```
+
 ### Sample Response
 
 ```json
 {
-    "paymentId": "6823c05d-dd9d-4bab-a2d4-af9c22bc5fb0",
-    "amount": 999.99,
-    "currency": "USD",
-    "status": "PENDING",
-    "paymentMethod": "CREDIT_CARD",
-    "debtor": {
-        "name": "John Doe",
-        "accountNumber": "1234567890",
-        "address": "123 Main Street, New York, NY 10001",
-        "bankCode": "HDFC0001234",
-        "email": "john.doe@example.com",
-        "phoneNumber": "+1234567890"
-    },
-    "creditor": {
-        "name": "ABC Store",
-        "accountNumber": "9876543210",
-        "address": "456 Commerce Ave, Los Angeles, CA 90001",
-        "bankCode": "ICIC0005678",
-        "email": "payments@abcstore.com",
-        "phoneNumber": "+1987654321"
-    },
-    "createdAt": "2026-01-04T11:22:18.046674",
-    "links": {
-        "self": {
-            "href": "http://localhost:8080/api/v1/payments/6823c05d-dd9d-4bab-a2d4-af9c22bc5fb0",
-            "rel": "self"
-        }
-    },
-    "updatedAt": "2026-01-04T11:22:18.046674"
+  "paymentId": "6823c05d-dd9d-4bab-a2d4-af9c22bc5fb0",
+  "amount": 999.99,
+  "currency": "USD",
+  "status": "PENDING",
+  "paymentMethod": "CREDIT_CARD",
+  "debtor": {
+    "name": "John Doe",
+    "accountNumber": "1234567890",
+    "address": "123 Main Street, New York, NY 10001",
+    "bankCode": "HDFC0001234",
+    "email": "john.doe@example.com",
+    "phoneNumber": "+1234567890"
+  },
+  "creditor": {
+    "name": "ABC Store",
+    "accountNumber": "9876543210",
+    "address": "456 Commerce Ave, Los Angeles, CA 90001",
+    "bankCode": "ICIC0005678",
+    "email": "payments@abcstore.com",
+    "phoneNumber": "+1987654321"
+  },
+  "createdAt": "2026-01-04T11:22:18.046674",
+  "links": {
+    "self": {
+      "href": "http://localhost:8080/api/v1/payments/6823c05d-dd9d-4bab-a2d4-af9c22bc5fb0",
+      "rel": "self"
+    }
+  },
+  "updatedAt": "2026-01-04T11:22:18.046674"
 }
 ```
 
@@ -290,6 +257,7 @@ cd payments-api
 
 mvn clean compile
 ```
+
 ---
 
 ## API Documentation
@@ -312,11 +280,7 @@ http://localhost:8080/api/v1/api-docs
 
 ---
 
-
 ## Deployment
-
-
-
 
 ---
 

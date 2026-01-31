@@ -4,12 +4,10 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-
 @Getter
 @Setter
 @ConfigurationProperties(prefix = "payment.security")
 public class SecurityProperties {
-
     private IamConfig iam = new IamConfig();
     private MtlsConfig mtls = new MtlsConfig();
     private AuditConfig audit = new AuditConfig();
@@ -20,16 +18,15 @@ public class SecurityProperties {
     @Setter
     public static class IamConfig {
         private boolean enabled = true;
+        private String keyId;
         private String issuer;
         private String audience;
-        private String jwksUri;
-        private long tokenExpirationMs = 3600000; // 1 hour
-        private long jwksCacheDurationMs = 3600000; // 1 hour cache
+        private long tokenExpirationMs = 3_600_000;
         private boolean validateIssuer = true;
         private boolean validateAudience = true;
-        private int jwksConnectTimeoutMs = 5000;
-        private int jwksReadTimeoutMs = 5000;
-
+        private boolean sslEnabled = true;
+        private String sslPrivateKeyPath;
+        private String sslCertificatePath;
     }
 
     @Getter
@@ -47,8 +44,7 @@ public class SecurityProperties {
     @Setter
     public static class AuditConfig {
         private boolean enabled = true;
-        private String[] includedPaths = {"/api/**"};
-        private String[] excludedPaths = {"/actuator/**", "/health"};
+        private String[] excludedPaths;
     }
 
     @Getter

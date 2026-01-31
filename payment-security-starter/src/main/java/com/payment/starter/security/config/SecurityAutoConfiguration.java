@@ -34,7 +34,10 @@ public class SecurityAutoConfiguration {
     @ConditionalOnProperty(prefix = "payment.security.iam", name = "enabled", havingValue = "true", matchIfMissing = true)
     public SecurityFilterChain securityFilterChain(HttpSecurity http, SecurityProperties securityProperties, JwtAuthenticationFilter jwtAuthenticationFilter, AuthenticationProvider iamAuthenticationProvider) throws Exception {
         http
-                .csrf(csrf -> csrf.ignoringRequestMatchers(" /api/v1/h2-console/**").disable())
+                .csrf(csrf -> csrf
+                        .ignoringRequestMatchers("/h2-console/**")
+                        .disable()
+                )
                 .requestCache(cache -> cache.disable())// disable CSRF for simplicity
                 .authorizeHttpRequests(auth -> {
                             String[] excludedPaths = securityProperties.getAudit().getExcludedPaths();
@@ -44,7 +47,7 @@ public class SecurityAutoConfiguration {
                         }
                 )
                 //for H2 DB
-                .headers(headers -> headers.frameOptions(frame -> frame.sameOrigin()))
+                .headers(headers -> headers.frameOptions(f -> f.sameOrigin()))
                 .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))
                 .authenticationProvider(iamAuthenticationProvider)
                 .formLogin(form -> form.disable())

@@ -43,6 +43,7 @@ public class PaymentSecurityAutoConfiguration {
     @Bean
     @ConditionalOnProperty(prefix = "payment.security.iam", name = "enabled", havingValue = "true", matchIfMissing = true)
     public FilterRegistrationBean<JwtAuthenticationFilter> jwtFilterRegistration(JwtAuthenticationFilter jwtAuthenticationFilter) {
+        log.info("Configuring jwtFilterRegistration Filter");
         FilterRegistrationBean<JwtAuthenticationFilter> registration = new FilterRegistrationBean<>(jwtAuthenticationFilter);
         registration.setAsyncSupported(true);
         registration.setEnabled(false);

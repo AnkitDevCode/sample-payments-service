@@ -24,6 +24,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @EnableAspectJAutoProxy
 public class PaymentSecurityAutoConfiguration {
 
+
     @Bean
     @ConditionalOnProperty(prefix = "payment.security.iam", name = "enabled", havingValue = "true", matchIfMissing = true)
     @ConditionalOnMissingBean
@@ -35,17 +36,28 @@ public class PaymentSecurityAutoConfiguration {
 
     @Bean
     @ConditionalOnProperty(prefix = "payment.security.iam", name = "enabled", havingValue = "true", matchIfMissing = true)
-    @ConditionalOnMissingBean
-    public IamAuthenticationProvider iamAuthenticationProvider(IAMTokenService iamTokenService) {
-        log.info("Configuring IAM Authentication Provider");
-        return new IamAuthenticationProvider(iamTokenService);
+    public JwtAuthenticationFilter jwtAuthenticationFilter(IAMTokenService iamTokenValidator, SecurityProperties properties) {
+        return new JwtAuthenticationFilter(iamTokenValidator, properties);
     }
 
     @Bean
     @ConditionalOnProperty(prefix = "payment.security.iam", name = "enabled", havingValue = "true", matchIfMissing = true)
-    public JwtAuthenticationFilter jwtAuthenticationFilter(IAMTokenService iamTokenService, SecurityProperties properties) {
-        return new JwtAuthenticationFilter(iamTokenService, properties);
+    public FilterRegistrationBean<JwtAuthenticationFilter> jwtFilterRegistration(JwtAuthenticationFilter jwtAuthenticationFilter) {
+        FilterRegistrationBean<JwtAuthenticationFilter> registration = new FilterRegistrationBean<>(jwtAuthenticationFilter);
+        registration.setAsyncSupported(true);
+        registration.setEnabled(false);
+        return registration;
     }
+
+
+    @Bean
+    @ConditionalOnProperty(prefix = "payment.security.iam", name = "enabled", havingValue = "true", matchIfMissing = true)
+    @ConditionalOnMissingBean
+    public IamAuthenticationProvider iamAuthenticationProvider(IAMTokenService iamTokenValidator) {
+        log.info("Configuring IAM Authentication Provider");
+        return new IamAuthenticationProvider(iamTokenValidator);
+    }
+
 
     @Bean
     @ConditionalOnMissingBean

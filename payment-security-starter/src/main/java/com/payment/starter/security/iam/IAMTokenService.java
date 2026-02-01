@@ -159,11 +159,10 @@ public class IAMTokenService {
         }
 
         // Remove PEM headers and whitespace
-        String publicKeyPEM = pem
+        return pem
                 .replace("-----BEGIN PUBLIC KEY-----", "")
                 .replace("-----END PUBLIC KEY-----", "")
                 .replaceAll("\\s", "");
-        return publicKeyPEM;
     }
 
     public JWTClaimsSet validateAndExtract(String token) {

@@ -1,6 +1,7 @@
 package com.payment.starter.security.config;
 
 import com.payment.starter.security.filter.JwtAuthenticationFilter;
+import jakarta.servlet.DispatcherType;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
@@ -40,10 +41,12 @@ public class SecurityAutoConfiguration {
                 )
                 .requestCache(cache -> cache.disable())// disable CSRF for simplicity
                 .authorizeHttpRequests(auth -> {
+                            auth.dispatcherTypeMatchers(DispatcherType.ASYNC).permitAll();
                             String[] excludedPaths = securityProperties.getAudit().getExcludedPaths();
                             log.info("Configuring excluded paths: {}", Arrays.toString(excludedPaths));
                             auth.requestMatchers(excludedPaths).permitAll()
                                     .anyRequest().authenticated();
+
                         }
                 )
                 //for H2 DB

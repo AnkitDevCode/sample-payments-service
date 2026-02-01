@@ -34,7 +34,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
         log.info("JwtAuthenticationFilter processing {}", request.getRequestURI());
-
+        //request.setAttribute(Globals.ASYNC_SUPPORTED_ATTR, true);
         if (isExcluded(request)) {
             log.warn("URL {} is excluded from JWT filter, skipping", request.getRequestURI());
             filterChain.doFilter(request, response);
@@ -100,4 +100,5 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
         return false;
     }
+
 }

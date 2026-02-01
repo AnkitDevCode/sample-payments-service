@@ -1,7 +1,6 @@
 server:
   servlet:
     context-path: /api/v1
-
 payment:
   security:
     iam:
@@ -13,12 +12,13 @@ payment:
       ssl-certificate-path: classpath:certs/payment-service-public.pem
       key-id: payment-service-key
       token-expiration-ms: 3600000
-      jwks-cache-duration-ms: 3600000
       validate-issuer: true
       validate-audience: true
     audit:
       enabled: true
       excluded-paths:
+        - "/benchmark/**"
+        - "/benchmark/completable/**"
         - "/auth/login/**"
         - "/h2-console/**"
         - "/error"
@@ -28,7 +28,10 @@ payment:
         - "/actuator/**"
         - "/health"
 
-spring:
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:spring:
   application:
     name: payments-service
   datasource:
@@ -40,10 +43,7 @@ spring:
     console:
       enabled: true
       path: /h2-console
-  jpa:
-    hibernate:
-      ddl-auto: update
-    properties:
+      use-config-servlet-context-path: true
       hibernate:
         dialect: org.hibernate.dialect.H2Dialect
         jdbc:

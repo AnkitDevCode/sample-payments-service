@@ -2,6 +2,8 @@ package com.payments.service.impl;
 
 import com.auth.model.LoginRequest;
 import com.auth.model.LoginResponse;
+import com.auth.model.TokenValidationResponse;
+import com.nimbusds.jwt.proc.BadJWTException;
 import com.payment.starter.security.config.SecurityProperties;
 import com.payment.starter.security.iam.IAMTokenService;
 import com.payments.entity.User;
@@ -14,6 +16,7 @@ import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @Slf4j
@@ -45,17 +48,33 @@ public class AuthServiceImpl implements AuthService {
             throw new BadCredentialsException("Invalid credentials");
         }
 
-        Map<String, Object> claims = Map.of(
-                "roles", user.getRoles(),
-                "type", "USER"
-        );
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("userId", user.getId());
+        claims.put("roles", user.getRoles());
 
-        String token = iamTokenService.generateToken(user.getUsername(), claims);
+        String token = iamTokenService.issueToken(user.getUsername(), claims);
 
         LoginResponse loginResponse = new LoginResponse();
         loginResponse.setAccessToken(token);
+        loginResponse.setTokenType("Bearer");
         loginResponse.setExpiresIn((int) config.getIam().getTokenExpirationMs());
 
         return loginResponse;
+    }
+
+    @Override
+    public TokenValidationResponse isValidToken(String token) {
+        TokenValidationResponse response = new TokenValidationResponse();
+        try {
+            iamTokenService.validateAndExtract(token);
+            response.setValid(true);
+        } catch (BadJWTException e) {
+            log.warn("Token validation failed: {}", e.getMessage());
+            response.setValid(false);
+        } catch (Exception e) {
+            log.error("Unexpected token validation error", e);
+            response.setValid(false);
+        }
+        return response;
     }
 }

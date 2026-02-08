@@ -1,6 +1,7 @@
 package com.payment.starter.security.iam;
 
 import com.nimbusds.jwt.JWTClaimsSet;
+import lombok.SneakyThrows;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -14,6 +15,7 @@ import java.util.stream.Collectors;
 
 public record IamAuthenticationProvider(IAMTokenService tokenValidator) implements AuthenticationProvider {
 
+    @SneakyThrows
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         String token = authentication.getCredentials().toString();

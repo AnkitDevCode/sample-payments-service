@@ -35,8 +35,8 @@ payment:
       issuer: auth-service
       audience: payment-service
       ssl-enabled: true
-      ssl-private-key-path: classpath:certs/payment-service.key.pem
-      ssl-certificate-path: classpath:certs/payment-service-public.pem
+      ssl-private-key-path: classpath:certs/private-key-pkcs8.pem
+      ssl-certificate-path: classpath:certs/public-key.pem
       key-id: payment-service-key
       token-expiration-ms: 3600000
       validate-issuer: true
@@ -45,9 +45,8 @@ payment:
     audit:
       enabled: true
       excluded-paths:
-        - "/benchmark/**"
-        - "/benchmark/completable/**"
-        - "/auth/login/**"
+        - "/auth/**"
+        - "/users/**"
         - "/h2-console/**"
         - "/error"
         - "/swagger-ui/**"

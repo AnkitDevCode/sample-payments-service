@@ -1,0 +1,183 @@
+{
+	"info": {
+		"_postman_id": "7bb06c58-7688-4de9-b149-551c4e1fe7bd",
+		"name": "payment-ms",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "create-user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const response = pm.response.json();\r",
+							"// set simple variables\r",
+							"pm.environment.set(\"userId\", response.id);\r",
+							"pm.environment.set(\"username\", response.username);\r",
+							"pm.environment.set(\"enabled\", response.enabled);\r",
+							"// arrays should be stringified\r",
+							"pm.environment.set(\"roles\", JSON.stringify(response.roles));"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"username\": \"ankit@gmail.com\",\r\n  \"password\": \"admin123\",\r\n  \"enabled\": true,\r\n  \"roles\": [\"USER\", \"ADMIN\"]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/users",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"ankit\",\r\n    \"password\": \"admin123\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/auth/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "validate-token",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{accessToken}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/auth/token/validate",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"auth",
+						"token",
+						"validate"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create-payment",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"amount\": 999.99,\r\n  \"currency\": \"USD\",\r\n  \"paymentMethod\": \"CREDIT_CARD\",\r\n  \"debtor\": {\r\n    \"name\": \"John Doe\",\r\n    \"accountNumber\": \"1234567890\",\r\n    \"bankCode\": \"HDFC0001234\",\r\n    \"address\": \"123 Main Street, New York, NY 10001\",\r\n    \"email\": \"john.doe@example.com\",\r\n    \"phoneNumber\": \"+1234567890\"\r\n  },\r\n  \"creditor\": {\r\n    \"name\": \"ABC Store\",\r\n    \"accountNumber\": \"9876543210\",\r\n    \"bankCode\": \"ICIC0005678\",\r\n    \"address\": \"456 Commerce Ave, Los Angeles, CA 90001\",\r\n    \"email\": \"payments@abcstore.com\",\r\n    \"phoneNumber\": \"+1987654321\"\r\n  }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/payments",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"payments"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get-payment",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{tokenType}}  {{accessToken}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/payments/{{paymentId}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"payments",
+						"{{paymentId}}"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

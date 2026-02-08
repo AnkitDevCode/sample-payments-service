@@ -51,6 +51,37 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
 
+  /auth/token/validate:
+    post:
+      summary: Validate JWT token
+      description: Validates a JWT access token from the Authorization header.
+      operationId: validateToken
+      tags:
+        - Authentication
+      parameters:
+        - name: Authorization
+          in: header
+          required: true
+          description: Bearer access token
+          schema:
+            type: string
+            example: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9...
+      responses:
+        '200':
+          description: Token validation result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenValidationResponse'
+              example:
+                valid: true
+        '400':
+          description: Missing or malformed Authorization header
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
 components:
   schemas:
     LoginRequest:
@@ -80,6 +111,13 @@ components:
         expiresIn:
           type: integer
           description: Token expiry time in seconds
+
+    TokenValidationResponse:
+      type: object
+      properties:
+        valid:
+          type: boolean
+          description: Indicates whether the token is valid
 
     ErrorResponse:
       type: object

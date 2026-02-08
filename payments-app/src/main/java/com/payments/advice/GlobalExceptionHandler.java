@@ -1,6 +1,8 @@
 package com.payments.advice;
 
+import com.payments.exception.DuplicateUsernameException;
 import com.payments.exception.PaymentNotFoundException;
+import com.payments.exception.UserNotFoundException;
 import com.payments.model.ErrorResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
@@ -102,6 +104,27 @@ public class GlobalExceptionHandler {
         err.setMessage(ex.getMessage());
         err.setPath(request.getRequestURI());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(err);
+    }
+
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleUserNotFound(UserNotFoundException ex,HttpServletRequest request) {
+        ErrorResponse err = new ErrorResponse();
+        err.setTimestamp(LocalDateTime.now());
+        err.setStatus(HttpStatus.NOT_FOUND.value());
+        err.setError(HttpStatus.NOT_FOUND.getReasonPhrase());
+        err.setMessage(ex.getMessage());
+        err.setPath(request.getRequestURI());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(err);
+    }
+
+    @ExceptionHandler(DuplicateUsernameException.class)
+    public ResponseEntity<ErrorResponse> handleDuplicateUsername(DuplicateUsernameException ex) {
+        ErrorResponse error = new ErrorResponse();
+        error.setStatus(HttpStatus.CONFLICT.value());
+        error.setError(HttpStatus.CONFLICT.getReasonPhrase());
+        error.setMessage(ex.getMessage());
+        error.setTimestamp(LocalDateTime.now());
+        return new ResponseEntity<>(error, HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler(Exception.class)

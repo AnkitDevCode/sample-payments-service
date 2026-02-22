@@ -64,4 +64,4 @@ springdoc:
 
 logging:
   external:
-    body-enabled: false
+    body-enabled: true

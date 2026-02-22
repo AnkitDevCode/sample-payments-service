@@ -1,86 +1,44 @@
 package com.payments.interceptor;
 
 import com.payments.config.ExternalLoggingProperties;
-import com.payments.dto.BufferedClientHttpResponse;
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpRequest;
-import org.springframework.http.client.ClientHttpRequestExecution;
-import org.springframework.http.client.ClientHttpRequestInterceptor;
-import org.springframework.http.client.ClientHttpResponse;
+import org.springframework.http.client.*;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 
 @Slf4j
-@AllArgsConstructor
-public class RestClientLoggingInterceptor implements ClientHttpRequestInterceptor {
+public record RestClientLoggingInterceptor(ExternalLoggingProperties props) implements ClientHttpRequestInterceptor {
 
-    private static final int MAX_BODY_LENGTH = 2 * 1024 * 1024; // 2 MB
-
-    private final ExternalLoggingProperties loggingProperties;
+    private static final int MAX = 2 * 1024 * 1024;
 
     @Override
-    public ClientHttpResponse intercept(HttpRequest request, byte[] body, ClientHttpRequestExecution execution) throws IOException {
+    public ClientHttpResponse intercept(HttpRequest req, byte[] body, ClientHttpRequestExecution ex) throws IOException {
+        long start = System.nanoTime();
 
-        long start = System.currentTimeMillis();
-        if (loggingProperties.bodyEnabled()) {
-            log.info(
-                    "External API request | method={} url={} headers={} body={}",
-                    request.getMethod(),
-                    request.getURI(),
-                    request.getHeaders(),
-                    truncate(body)
-            );
-        } else {
-            log.info(
-                    "External API request | method={} url={}",
-                    request.getMethod(),
-                    request.getURI()
-            );
+        log.info("External API request | method={} url={}", req.getMethod(), req.getURI());
+
+        if (props.bodyEnabled() && log.isDebugEnabled()) {
+            log.debug("External API request body={}", truncate(body));
         }
 
-        ClientHttpResponse response = execution.execute(request, body);
+        ClientHttpResponse res = ex.execute(req, body);
+        long latencyMs = (System.nanoTime() - start) / 1_000_000;
 
-        byte[] responseBody = readAllBytes(response.getBody());
+        log.info("External API response | method={} url={} status={} latencyMs={}",
+                req.getMethod(), req.getURI(), res.getStatusCode().value(), latencyMs);
 
-        if (loggingProperties.bodyEnabled()) {
-            log.info(
-                    "External API response | method={} url={} headers={} status={} latencyMs={} body={}",
-                    request.getMethod(),
-                    request.getURI(),
-                    response.getHeaders(),
-                    response.getStatusCode().value(),
-                    System.currentTimeMillis() - start,
-                    truncate(responseBody)
-            );
-        } else {
-            log.info(
-                    "External API response | method={} url={} status={} latencyMs={}",
-                    request.getMethod(),
-                    request.getURI(),
-                    response.getStatusCode().value(),
-                    System.currentTimeMillis() - start
-            );
+        if (props.bodyEnabled() && log.isDebugEnabled()) {
+            log.debug("External API response body={}", truncate(res.getBody().readAllBytes()));
         }
 
-        // IMPORTANT: wrap response so body can be read again
-        return new BufferedClientHttpResponse(response, responseBody);
+        return res;
     }
 
-    private byte[] readAllBytes(InputStream inputStream) throws IOException {
-        return inputStream.readAllBytes();
-    }
-
-    private String truncate(byte[] body) {
-        if (body.length == 0) {
-            return "Empty body";
-        }
-        if (body.length > MAX_BODY_LENGTH) {
-            return new String(body, 0, MAX_BODY_LENGTH, StandardCharsets.UTF_8)
-                    + "...(truncated, max=2MB)";
-        }
-        return new String(body, StandardCharsets.UTF_8);
+    private static String truncate(byte[] b) {
+        if (b == null || b.length == 0) return "<empty body>";
+        int len = Math.min(b.length, MAX);
+        return new String(b, 0, len, StandardCharsets.UTF_8) + (b.length > MAX ? "...(truncated)" : "");
     }
 }

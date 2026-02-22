@@ -14,7 +14,6 @@ public class TomcatValveConfiguration {
         return factory -> {
             AccessLogValve accessValve = new AccessLogValve();
             accessValve.setLogAccessInfo(true);
-            // Enable custom access logging
             factory.addContextValves(accessValve);
         };
     }

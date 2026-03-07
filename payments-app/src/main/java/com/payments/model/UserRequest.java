@@ -23,5 +23,5 @@ public class UserRequest {
     
     private Boolean enabled = true;
     
-    private Set<String> roles;
+    private Set<Role> roles;
 }

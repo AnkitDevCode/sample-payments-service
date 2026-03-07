@@ -1,6 +1,7 @@
 package com.payments.mapper;
 
 import com.payments.entity.User;
+import com.payments.entity.UserProfile;
 import com.payments.model.UserRequest;
 import com.payments.model.UserResponse;
 import org.springframework.stereotype.Component;
@@ -16,9 +17,17 @@ public class UserMapper {
         user.setPassword(request.getPassword());
         user.setEnabled(request.getEnabled() != null ? request.getEnabled() : true);
         user.setRoles(request.getRoles() != null ? request.getRoles() : new HashSet<>());
+        setDefaultUserProfile(user);
         return user;
     }
-    
+
+    private void setDefaultUserProfile(User user) {
+        UserProfile userProfile = new UserProfile();
+        userProfile.setPhone("123456789");
+        userProfile.setAddress("address");
+        user.setProfile(userProfile);
+    }
+
     public UserResponse toResponse(User user) {
         UserResponse response = new UserResponse();
         response.setId(user.getId());

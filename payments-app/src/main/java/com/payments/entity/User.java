@@ -22,12 +22,11 @@ import lombok.Setter;
 import java.util.HashSet;
 import java.util.Set;
 
-
 @Getter
 @Setter
 @Entity
 @Table(name = "users")
-public class User {
+public class User extends Auditable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

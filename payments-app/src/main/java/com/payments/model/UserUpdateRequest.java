@@ -10,7 +10,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserUpdateRequest {
-    
+
     private String password;
     private Boolean enabled;
     private Set<Role> roles;

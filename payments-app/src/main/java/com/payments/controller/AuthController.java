@@ -32,7 +32,7 @@ public class AuthController implements AuthenticationApi {
     }
 
     @Override
-    public ResponseEntity<TokenValidationResponse> validateToken( @RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader) {
+    public ResponseEntity<TokenValidationResponse> validateToken(@RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader) {
         log.info("validateToken");
         String token = authHeader.replace("Bearer ", "");
         return ResponseEntity.ok(authService.isValidToken(token));

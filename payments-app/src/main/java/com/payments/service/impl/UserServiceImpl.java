@@ -68,7 +68,7 @@ public class UserServiceImpl implements UserService {
     public List<UserResponse> getAllUsers() {
         log.info("Fetching all users");
 
-        return userRepository.findAllWithProfile()
+        return userRepository.findAll()
                 .stream()
                 .map(userMapper::toResponse)
                 .collect(Collectors.toList());

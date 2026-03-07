@@ -1,5 +1,6 @@
 package com.payments.mapper;
 
+import com.payments.entity.PaymentMethod;
 import com.payments.entity.User;
 import com.payments.entity.UserProfile;
 import com.payments.model.UserRequest;
@@ -10,7 +11,7 @@ import java.util.HashSet;
 
 @Component
 public class UserMapper {
-    
+
     public User toEntity(UserRequest request) {
         User user = new User();
         user.setUsername(request.getUsername());
@@ -18,14 +19,21 @@ public class UserMapper {
         user.setEnabled(request.getEnabled() != null ? request.getEnabled() : true);
         user.setRoles(request.getRoles() != null ? request.getRoles() : new HashSet<>());
         setDefaultUserProfile(user);
+        setDefaultPaymentMethod(user);
         return user;
+    }
+
+    private void setDefaultPaymentMethod(User user) {
+        PaymentMethod paymentMethod = new PaymentMethod();
+        paymentMethod.setType(com.payments.model.PaymentMethod.CASH_ON_DELIVERY);
+        user.addPaymentMethod(paymentMethod);
     }
 
     private void setDefaultUserProfile(User user) {
         UserProfile userProfile = new UserProfile();
         userProfile.setPhone("123456789");
         userProfile.setAddress("address");
-        user.setProfile(userProfile);
+        user.addProfile(userProfile);
     }
 
     public UserResponse toResponse(User user) {

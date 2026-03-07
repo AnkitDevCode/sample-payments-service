@@ -1,7 +1,6 @@
 package com.payments.entity;
 
 
-import com.payments.model.PaymentMethod;
 import com.payments.model.PaymentStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -15,11 +14,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "payments")
@@ -27,7 +23,7 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Payment extends Auditable{
+public class Payment extends Auditable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -47,10 +43,6 @@ public class Payment extends Auditable{
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private PaymentStatus status;
-
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private PaymentMethod paymentMethod;
 
     @Column(name = "debtor_name")
     private String debtorName;
@@ -87,11 +79,4 @@ public class Payment extends Auditable{
 
     @Column(name = "creditor_phone_number")
     private String creditorPhoneNumber;
-
-    @CreatedDate
-    @Column(nullable = false, updatable = false)
-    private LocalDateTime createdAt;
-
-    @LastModifiedDate
-    private LocalDateTime updatedAt;
 }

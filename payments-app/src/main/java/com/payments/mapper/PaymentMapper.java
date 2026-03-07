@@ -20,7 +20,6 @@ public class PaymentMapper {
         entity.setUserName("Admin");
         entity.setAmount(request.getAmount());
         entity.setCurrency(request.getCurrency());
-        entity.setPaymentMethod(request.getPaymentMethod());
         entity.setStatus(PaymentStatus.PENDING);
 
         // Map debtor details
@@ -56,7 +55,7 @@ public class PaymentMapper {
         payment.setAmount(entity.getAmount());
         payment.setCurrency(entity.getCurrency());
         payment.setStatus(entity.getStatus());
-        payment.setPaymentMethod(entity.getPaymentMethod());
+        //TODO payment.setPaymentMethod(entity.getPaymentMethod());
         payment.setCreatedAt(entity.getCreatedAt());
         payment.setUpdatedAt(entity.getUpdatedAt());
 

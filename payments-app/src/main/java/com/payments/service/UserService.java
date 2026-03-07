@@ -47,10 +47,10 @@ public interface UserService {
     /**
      * Update user completely
      *
-     * @param id User id
+     * @param id      User id
      * @param request User update request
      * @return Updated user response
-     * @throws UserNotFoundException if user not found
+     * @throws UserNotFoundException      if user not found
      * @throws DuplicateUsernameException if new username already exists
      */
     UserResponse updateUser(Long id, UserRequest request);
@@ -58,7 +58,7 @@ public interface UserService {
     /**
      * Partially update user
      *
-     * @param id User id
+     * @param id      User id
      * @param request Partial update request
      * @return Updated user response
      * @throws UserNotFoundException if user not found
@@ -76,7 +76,7 @@ public interface UserService {
     /**
      * Enable or disable user
      *
-     * @param id User id
+     * @param id      User id
      * @param enabled Enable status
      * @return Updated user response
      * @throws UserNotFoundException if user not found

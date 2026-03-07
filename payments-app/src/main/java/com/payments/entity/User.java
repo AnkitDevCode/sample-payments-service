@@ -13,15 +13,28 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.NamedAttributeNode;
+import jakarta.persistence.NamedEntityGraph;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
+@NamedEntityGraph(
+        name = "User.withDetails",
+        attributeNodes = {
+                @NamedAttributeNode("roles"),
+                @NamedAttributeNode("paymentMethods"),
+                @NamedAttributeNode("profile")
+        }
+)
 @Getter
 @Setter
 @Entity
@@ -44,6 +57,9 @@ public class User extends Auditable {
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private UserProfile profile;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<PaymentMethod> paymentMethods = new ArrayList<>();
+
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"), uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "role"}))
     @Enumerated(EnumType.STRING)
@@ -64,7 +80,21 @@ public class User extends Auditable {
         return this.roles.contains(role);
     }
 
-    public void setProfile(UserProfile profile) {
+    public void addPaymentMethod(PaymentMethod paymentMethod) {
+        if (paymentMethod != null) {
+            this.paymentMethods.add(paymentMethod);
+            paymentMethod.addUser(this);
+        }
+    }
+
+    public void removePaymentMethod(PaymentMethod paymentMethod) {
+        if (paymentMethod != null) {
+            this.paymentMethods.remove(paymentMethod);
+            paymentMethod.addUser(null);
+        }
+    }
+
+    public void addProfile(UserProfile profile) {
         this.profile = profile;
         if (profile != null) {
             profile.setUser(this);

@@ -3,7 +3,9 @@ package com.payments.interceptor;
 import com.payments.config.ExternalLoggingProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpRequest;
-import org.springframework.http.client.*;
+import org.springframework.http.client.ClientHttpRequestExecution;
+import org.springframework.http.client.ClientHttpRequestInterceptor;
+import org.springframework.http.client.ClientHttpResponse;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;

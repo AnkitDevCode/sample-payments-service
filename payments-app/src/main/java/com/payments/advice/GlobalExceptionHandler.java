@@ -111,7 +111,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(UserNotFoundException.class)
-    public ResponseEntity<ErrorResponse> handleUserNotFound(UserNotFoundException ex,HttpServletRequest request) {
+    public ResponseEntity<ErrorResponse> handleUserNotFound(UserNotFoundException ex, HttpServletRequest request) {
         log.error(ex.getMessage(), ex);
         ErrorResponse err = new ErrorResponse();
         err.setTimestamp(LocalDateTime.now());

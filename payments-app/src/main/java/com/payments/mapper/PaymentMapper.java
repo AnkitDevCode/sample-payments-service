@@ -1,8 +1,7 @@
 package com.payments.mapper;
 
-import com.payments.entity.PaymentEntity;
+import com.payments.entity.Payment;
 import com.payments.model.Party;
-import com.payments.model.Payment;
 import com.payments.model.PaymentRequest;
 import com.payments.model.PaymentStatus;
 import org.springframework.stereotype.Component;
@@ -12,11 +11,11 @@ import java.util.UUID;
 @Component
 public class PaymentMapper {
 
-    public PaymentEntity toEntity(PaymentRequest request) {
+    public Payment toEntity(PaymentRequest request) {
         if (request == null) {
             return null;
         }
-        PaymentEntity entity = new PaymentEntity();
+        Payment entity = new Payment();
         entity.setPaymentId(UUID.randomUUID().toString());
         entity.setUserName("Admin");
         entity.setAmount(request.getAmount());
@@ -48,11 +47,11 @@ public class PaymentMapper {
     }
 
 
-    public Payment toModel(PaymentEntity entity) {
+    public com.payments.model.Payment toModel(Payment entity) {
         if (entity == null) {
             return null;
         }
-        Payment payment = new Payment();
+        com.payments.model.Payment payment = new com.payments.model.Payment();
         payment.setPaymentId(entity.getPaymentId());
         payment.setAmount(entity.getAmount());
         payment.setCurrency(entity.getCurrency());

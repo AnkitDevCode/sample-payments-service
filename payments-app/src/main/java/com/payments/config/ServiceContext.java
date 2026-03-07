@@ -5,7 +5,6 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.BufferingClientHttpRequestFactory;
-import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.web.client.RestClient;
 
@@ -14,14 +13,15 @@ import org.springframework.web.client.RestClient;
 public class ServiceContext {
 
     @Bean
-    public RestClient restClient(RestClient.Builder builder, ExternalLoggingProperties properties) {
-        return builder
-                .requestFactory(bufferedRequestFactory())
-                .requestInterceptor(new RestClientLoggingInterceptor(properties))
-                .build();
+    public RestClientLoggingInterceptor loggingInterceptor(ExternalLoggingProperties props) {
+        return new RestClientLoggingInterceptor(props);
     }
 
-    private ClientHttpRequestFactory bufferedRequestFactory() {
-        return new BufferingClientHttpRequestFactory(new SimpleClientHttpRequestFactory());
+    @Bean
+    public RestClient restClient(RestClientLoggingInterceptor loggingInterceptor) {
+        return RestClient.builder()
+                .requestFactory(new BufferingClientHttpRequestFactory(new SimpleClientHttpRequestFactory()))
+                .requestInterceptor(loggingInterceptor)
+                .build();
     }
 }

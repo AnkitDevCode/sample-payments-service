@@ -25,6 +25,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> handleValidationExceptions(HttpServletRequest request, MethodArgumentNotValidException ex) {
+        log.error(ex.getMessage(), ex);
         String errorMessage = ex.getBindingResult()
                 .getFieldErrors()
                 .stream()
@@ -45,6 +46,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleBadCredentialsException(
             BadCredentialsException ex,
             HttpServletRequest request) {
+        log.error(ex.getMessage(), ex);
         ErrorResponse error = new ErrorResponse();
         error.setTimestamp(LocalDateTime.now());
         error.setStatus(HttpStatus.UNAUTHORIZED.value());
@@ -59,7 +61,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleDisabledException(
             DisabledException ex,
             HttpServletRequest request) {
-
+        log.error(ex.getMessage(), ex);
         ErrorResponse error = new ErrorResponse();
         error.setTimestamp(LocalDateTime.now());
         error.setStatus(HttpStatus.FORBIDDEN.value());
@@ -72,6 +74,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<ErrorResponse> handleDataIntegrity(DataIntegrityViolationException ex, HttpServletRequest request) {
+        log.error(ex.getMessage(), ex);
         ErrorResponse error = new ErrorResponse();
         error.setTimestamp(LocalDateTime.now());
         error.setStatus(HttpStatus.CONFLICT.value()); // 409 Conflict
@@ -84,6 +87,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(NoResourceFoundException.class)
     public ResponseEntity<ErrorResponse> handleNotFound(NoResourceFoundException ex, HttpServletRequest request) {
+        log.error(ex.getMessage(), ex);
         ErrorResponse error = new ErrorResponse();
         error.setTimestamp(LocalDateTime.now());
         error.setStatus(HttpStatus.NOT_FOUND.value());
@@ -108,6 +112,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleUserNotFound(UserNotFoundException ex,HttpServletRequest request) {
+        log.error(ex.getMessage(), ex);
         ErrorResponse err = new ErrorResponse();
         err.setTimestamp(LocalDateTime.now());
         err.setStatus(HttpStatus.NOT_FOUND.value());
@@ -119,6 +124,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(DuplicateUsernameException.class)
     public ResponseEntity<ErrorResponse> handleDuplicateUsername(DuplicateUsernameException ex) {
+        log.error(ex.getMessage(), ex);
         ErrorResponse error = new ErrorResponse();
         error.setStatus(HttpStatus.CONFLICT.value());
         error.setError(HttpStatus.CONFLICT.getReasonPhrase());

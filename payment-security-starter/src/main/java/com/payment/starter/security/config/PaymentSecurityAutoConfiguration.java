@@ -1,7 +1,6 @@
 package com.payment.starter.security.config;
 
 import com.nimbusds.jose.JOSEException;
-import com.payment.starter.security.aspect.ExceptionHandlingAspect;
 import com.payment.starter.security.aspect.PerformanceMonitoringAspect;
 import com.payment.starter.security.filter.JwtAuthenticationFilter;
 import com.payment.starter.security.filter.RequestLoggingFilter;
@@ -83,12 +82,6 @@ public class PaymentSecurityAutoConfiguration {
         return new PerformanceMonitoringAspect();
     }
 
-    @Bean
-    @ConditionalOnMissingBean
-    public ExceptionHandlingAspect exceptionHandlingAspect() {
-        log.info("Configuring Exception Handling Aspect");
-        return new ExceptionHandlingAspect();
-    }
 
     @Bean
     @ConditionalOnProperty(prefix = "payment.security.logging", name = "log-responses", havingValue = "true", matchIfMissing = false)
